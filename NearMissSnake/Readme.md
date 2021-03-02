@@ -1,0 +1,1 @@
+![](https://github.com/nezvers/Games_in_C/raw/main/NearMissSnake/Preview.gif)

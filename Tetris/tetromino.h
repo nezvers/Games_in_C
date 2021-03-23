@@ -43,6 +43,8 @@ extern int gridWidth;
 extern int gridHeight;
 
 extern Color colors[];
+extern int levelSpeed[];
+extern int levelCount;
 
 
 v2i VecAdd(v2i a, v2i b);

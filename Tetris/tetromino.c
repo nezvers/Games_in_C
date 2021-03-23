@@ -34,7 +34,8 @@ v2i rotation_I[] = {
 //					T, 		S, 	 Z, 	L, 		J, 		I, 					O, 	solid, BG,
 Color colors[] = {PURPLE, GREEN, RED, ORANGE, BLUE, (Color){0,255,255,255}, YELLOW, GRAY, BLACK};
 
-
+int levelSpeed[] = {60, 54, 48, 41, 37, 31, 28, 21, 16, 11, 8, 6, 4, 3, 2, 1};
+int levelCount = 16;
 
 /*
 J, L, S, T, Z Tetromino Wall Kick Data

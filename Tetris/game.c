@@ -7,7 +7,7 @@ int screenWidth = 800;
 int screenHeight = 450;
 StateMachine sm = {0};
 int fallTime;
-int fallFrames = 30;
+int level = 1;
 int clearBitmask = 0;
 int clearLine = 0;
 Tetromino pieces[7];
@@ -159,7 +159,7 @@ void StateFallEnter(void){
 void StateFallUpdate(void){
 	InputUpdate();
 	
-	fallTime = (fallTime+1) % fallFrames;
+	fallTime = (fallTime+1) % levelSpeed[level];
 	if (fallTime == 0){
 		if(!CheckCollision(VecAdd(tet->p, (v2i){0,1}), tet->s, tet->r)){
 			TetrominoMove(tet, (v2i){0, 1});

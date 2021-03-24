@@ -56,12 +56,12 @@ void GameScreen(){
 	BeginDrawing();
 
         ClearBackground(BLACK);
-		DrawTetrominoGhost(tet);
-		DrawTetromino(tet);
-		DrawLevel(0, 0);
-		//shaded grid pizzazz
         DrawGridLines(1, 1, gridWidth, gridHeight, cellSize, GRAY);
         DrawGridLines(0, 0, gridWidth, gridHeight, cellSize, LIGHTGRAY);
+		DrawTetrominoGhost(tet, 0, 0);
+		DrawTetromino(tet, 0, 0);
+		DrawLevel(0, 0);
+		//shaded grid pizzazz
 		
 		DrawPreview();
 

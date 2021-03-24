@@ -92,32 +92,32 @@ void DrawLevel(int x, int y){
 	}
 }
 
-void DrawTetromino(Tetromino *t){
+void DrawTetromino(Tetromino *t, int x, int y){
 	for (int i=0; i<4; i++){
 		v2i pos = VecAdd(t->b[i], t->p);
 		if(pos.y > 3){
 			pos.y -= 4;
-			DrawRectangle(pos.x*cellSize, pos.y*cellSize, cellSize, cellSize, colors[t->s]);
+			DrawRectangle(pos.x*cellSize +x, pos.y*cellSize +y, cellSize, cellSize, colors[t->s]);
 		}
 	}
 }
 
-void DrawTetrominoGhost(Tetromino *t){
-	int y = 0;
+void DrawTetrominoGhost(Tetromino *t, int x, int y){
+	int _y = 0;
 	for(int i=0; i<24; i++){
 		if(!CheckCollision(VecAdd(t->p, (v2i){0,i}), t->s, t->r)){
-			y = i;
+			_y = i;
 		}
 		else{break;}
 	}
 	Tetromino ghost = *t;
-	ghost.p.y += y;
+	ghost.p.y += _y;
 	
 	for (int i=0; i<4; i++){
 		v2i pos = VecAdd(ghost.b[i], ghost.p);
 		if(pos.y > 3){
 			pos.y -= 4;
-			DrawRectangle(pos.x*cellSize, pos.y*cellSize, cellSize, cellSize, (Color){255,255,255,75});
+			DrawRectangle(pos.x*cellSize +x, pos.y*cellSize +y, cellSize, cellSize, (Color){255,255,255,75});
 		}
 	}
 }

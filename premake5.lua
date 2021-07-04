@@ -1,4 +1,4 @@
-workspace "GameTemplate"
+workspace "Games in C"
 	configurations { "Debug", "Release", "Debug.DLL", "Release.DLL" }
 	platforms { "x64"}
 	defaultplatform "x64"
@@ -35,11 +35,15 @@ project "raylib"
 	filter "action:vs*"
 		defines{"_WINSOCK_DEPRECATED_NO_WARNINGS", "_CRT_SECURE_NO_WARNINGS", "_WIN32"}
 		links {"winmm"}
+	
+	filter "action:gmake*"
+		links {"winmm"}
 				
 	filter{}
 	
 	location "build"
 	language "C"
+    cdialect "C11"
 	targetdir "bin/%{cfg.buildcfg}"
 	
 	includedirs { "raylib/src", "raylib/src/external/glfw/include"}
@@ -53,27 +57,56 @@ project "raylib"
 	defines{"PLATFORM_DESKTOP", "GRAPHICS_API_OPENGL_33"}
 	
 
-project "TheGame"
+project "NearMissSnake"
 	kind "ConsoleApp"
 	location "build"
 	language "C"
+    cdialect "C11"
 	targetdir "bin/%{cfg.buildcfg}"
 	defines{"PLATFORM_DESKTOP", "GRAPHICS_API_OPENGL_33"}
 	
 	vpaths 
 	{
-		["Header Files"] = { "src/headers/*.h"},
-		["Source Files"] = {"src/*.c"},
+		["Header Files"] = { "NearMissSnake/*.h"},
+		["Source Files"] = {"NearMissSnake/*.c"},
 	}
-	files {"src/*.c", "src/headers/*.h"}
+	files {"NearMissSnake/*.c", "NearMissSnake/*.h"}
 
 	links {"raylib", "winmm", "kernel32", "opengl32", "gdi32"}
 	
-	includedirs { "raylib/src", "include", "src/headers" }
+	includedirs { "raylib/src", "include", "NearMissSnake" }
 	
 	filter "action:vs*"
 		defines{"_WINSOCK_DEPRECATED_NO_WARNINGS", "_CRT_SECURE_NO_WARNINGS", "_WIN32"}
-		links {"winmm"}
+		dependson {"raylib"}
+		links {"raylib.lib", "winmm", "kernel32"}
+		libdirs {"bin/%{cfg.buildcfg}"}
+	
+	filter "action:gmake*"
+		links {"pthread", "GL", "m", "dl", "rt", "X11"}
+	
+
+project "Tetris"
+	kind "ConsoleApp"
+	location "build"
+	language "C"
+    cdialect "C11"
+	targetdir "bin/%{cfg.buildcfg}"
+	defines{"PLATFORM_DESKTOP", "GRAPHICS_API_OPENGL_33"}
+	
+	vpaths 
+	{
+		["Header Files"] = { "Tetris/*.h"},
+		["Source Files"] = {"Tetris/*.c"},
+	}
+	files {"Tetris/*.c", "Tetris/*.h"}
+
+	links {"raylib", "winmm", "kernel32", "opengl32", "gdi32"}
+	
+	includedirs { "raylib/src", "include", "Tetris" }
+	
+	filter "action:vs*"
+		defines{"_WINSOCK_DEPRECATED_NO_WARNINGS", "_CRT_SECURE_NO_WARNINGS", "_WIN32"}
 		dependson {"raylib"}
 		links {"raylib.lib", "winmm", "kernel32"}
 		libdirs {"bin/%{cfg.buildcfg}"}

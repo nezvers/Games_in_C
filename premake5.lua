@@ -113,6 +113,35 @@ project "Tetris"
 	
 	filter "action:gmake*"
 		links {"pthread", "GL", "m", "dl", "rt", "X11"}
+	
+
+project "Pong"
+	kind "ConsoleApp"
+	location "build"
+	language "C"
+    cdialect "C11"
+	targetdir "bin/%{cfg.buildcfg}"
+	defines{"PLATFORM_DESKTOP", "GRAPHICS_API_OPENGL_33"}
+	
+	vpaths 
+	{
+		["Header Files"] = { "Pong/*.h"},
+		["Source Files"] = {"Pong/*.c"},
+	}
+	files {"Pong/*.c", "Pong/*.h"}
+
+	links {"raylib", "winmm", "kernel32", "opengl32", "gdi32"}
+	
+	includedirs { "raylib/src", "include", "Pong" }
+	
+	filter "action:vs*"
+		defines{"_WINSOCK_DEPRECATED_NO_WARNINGS", "_CRT_SECURE_NO_WARNINGS", "_WIN32"}
+		dependson {"raylib"}
+		links {"raylib.lib", "winmm", "kernel32"}
+		libdirs {"bin/%{cfg.buildcfg}"}
+	
+	filter "action:gmake*"
+		links {"pthread", "GL", "m", "dl", "rt", "X11"}
 
 
 

@@ -12,6 +12,7 @@
 
 #include "raylib.h"
 #include <stdio.h>
+#include "game.h"
 
 //Sounds & music are converted using bi2header - https://github.com/AntumDeluge/bin2header
 // SFX from sfxcellar.accusonus.com
@@ -20,7 +21,7 @@
 #include "SFX_Cellar_UI_Button_43.wav.h"
 #include "SFX_Cellar_UI_Button_67.wav.h"
 // music - https://modarchive.org/index.php?request=view_by_moduleid&query=172898
-#include "4_rndd.xm.h"
+#include "MUSIC_4_rndd.xm.h"
 
 
 #if defined(PLATFORM_WEB)
@@ -55,8 +56,8 @@ Music music;
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
-void InitGame(void);
-void GameLoop(void);     // Update and Draw one frame
+
+
 void (*Screen)(void);
 void InitTitle(void);
 void TitleScreen(void);
@@ -66,7 +67,7 @@ void InitDifficulity(void);
 void DifficulityScreen(void);
 void InitLevel(void);
 void LevelScreen(void);
-void InitGameScreen(void);
+void Start(void);
 void GameScreen(void);
 
 int quadratic_easing_out(int start, int end, float position);
@@ -77,8 +78,8 @@ Color ColorBlend(Color a, Color b, float percent);
 //----------------------------------------------------------------------------------
 // Main Entry Point
 //----------------------------------------------------------------------------------
-int main(){
-    InitGame();	
+int __main(){
+    Init();	
 	
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(GameLoop, 0, 1);
@@ -87,13 +88,13 @@ int main(){
     //--------------------------------------------------------------------------------------
     // Main game loop
     while (!WindowShouldClose() && !quit){    // Detect window close button or ESC key
-        GameLoop();
+        UpdateFrame();
     }
 #endif
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    CloseAudioDevice();
+  CloseAudioDevice();
 	CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -105,7 +106,7 @@ int main(){
 //----------------------------------------------------------------------------------
 
 
-void InitGame(void){
+void Init(void){
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(screenWidth, screenHeight, "Near Miss Snake");
 	
@@ -129,7 +130,13 @@ void InitGame(void){
 	InitTitle();
 }
 
-void GameLoop(void){
+void Cleanup(void)
+{
+	CloseAudioDevice();
+	CloseWindow();
+}
+
+void UpdateFrame(void){
 	if (IsWindowResized())
         {
             screenWidth = GetScreenWidth();
@@ -496,7 +503,7 @@ void LevelScreen(void){
 		}
 		if (revealSegment == length){
 			// Start moving
-			InitGameScreen();
+			Start();
 			prevPalette[0] = palette[0];
 			prevPalette[1] = palette[1];
 			prevPalette[2] = palette[2];
@@ -556,7 +563,7 @@ void SpawnApple(){
 
 bool isDead = false;
 
-void InitGameScreen(){
+void Start(){
 	Screen = GameScreen;
 	time = 0;
 	isDead = false;

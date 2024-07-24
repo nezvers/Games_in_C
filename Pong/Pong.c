@@ -32,7 +32,7 @@ const int gameWidth = 320;
 const int gameHeight = 180;
 RenderTexture viewport;
 int scale = 1;
-Vector2 vpOffset = (Vector2){0.0f, 0.0f};
+Vector2 vpOffset = {0.0f, 0.0f};
 
 
 /**********************/
@@ -42,7 +42,7 @@ int score2;
 float ballW = 4;
 float ballSpd = 1.0f * 60;
 Vector2 ball;
-Vector2 dir = (Vector2){1.0f, 0.0f};
+Vector2 dir = {1.0f, 0.0f};
 Vector2 center;
 float padX1;
 float padX2;

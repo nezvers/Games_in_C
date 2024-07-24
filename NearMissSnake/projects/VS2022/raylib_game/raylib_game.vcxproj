@@ -359,7 +359,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\MUSIC_4_rndd.xm.h" />
-    <ClInclude Include="..\..\..\src\near_miss_snake.h" />
+    <ClInclude Include="..\..\..\src\game.h" />
     <ClInclude Include="..\..\..\src\SFX_Cellar_UI_Button_14.wav.h" />
     <ClInclude Include="..\..\..\src\SFX_Cellar_UI_Button_41.wav.h" />
     <ClInclude Include="..\..\..\src\SFX_Cellar_UI_Button_43.wav.h" />

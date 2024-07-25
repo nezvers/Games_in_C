@@ -53,10 +53,19 @@ Sound s_menu;
 Sound s_apple;
 Music music;
 
+
+
+#define MAXVOLUME 11
+#define MUSIC 0
+#define SFX 1
+int volume[] = { MAXVOLUME - 1,MAXVOLUME - 1 };
+
+int optionsmenuCount = 3;
+int optionsIndex;
+
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
-
 
 void (*Screen)(void);
 void InitTitle(void);
@@ -76,31 +85,6 @@ Color ColorBlend(Color a, Color b, float percent);
 
 
 //----------------------------------------------------------------------------------
-// Main Entry Point
-//----------------------------------------------------------------------------------
-int __main(){
-    Init();	
-	
-#if defined(PLATFORM_WEB)
-    emscripten_set_main_loop(GameLoop, 0, 1);
-#else
-    SetTargetFPS(60);   // Set our game to run at 60 frames-per-second
-    //--------------------------------------------------------------------------------------
-    // Main game loop
-    while (!WindowShouldClose() && !quit){    // Detect window close button or ESC key
-        UpdateFrame();
-    }
-#endif
-
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-  CloseAudioDevice();
-	CloseWindow();        // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
-
-    return 0;
-}
-
 //----------------------------------------------------------------------------------
 // Module Functions Definition
 //----------------------------------------------------------------------------------
@@ -124,10 +108,17 @@ void Init(void){
 	s_menu = LoadSoundFromWave(w_menu);
 	s_apple = LoadSoundFromWave(w_apple);
 	music = LoadMusicStreamFromMemory(".xm", (unsigned char *)&rndd_xm, sizeof rndd_xm);
-	SetMusicVolume(music, 1.0);
+	SetMusicVolume(music, 0.1);
 	
 	PlayMusicStream(music);
 	InitTitle();
+}
+
+// Main game loop
+void GameLoop(void) {
+	while (!WindowShouldClose() && !quit) {    // Detect window close button or ESC key
+		UpdateFrame();
+	}
 }
 
 void Cleanup(void)
@@ -270,23 +261,12 @@ void TitleScreen(void){
 				originH += (fontBigH + fontSmallH) /2;
 			}
 		}
-		// if (blinkTime > blinkInterval /5){
-			// DrawText(hint, midW -hintFontW, hintH -(hintFontH /2), hintFontH, palette[1]);
-		// }
 
     EndDrawing();
     //----------------------------------------------------------------------------------
 	
 }
 
-
-#define MAXVOLUME 11
-#define MUSIC 0
-#define SFX 1
-int volume[] = {MAXVOLUME-1,MAXVOLUME-1};
-
-int optionsmenuCount = 3;
-int optionsIndex;
 
 
 void InitOptions(void){
@@ -306,7 +286,7 @@ void OptionsScreen(void){
 	}
 	else if((IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT)) && optionsIndex != optionsmenuCount-1){
 		volume[optionsIndex] = (volume[optionsIndex] +1) % MAXVOLUME;
-		if (optionsIndex == MUSIC){SetMusicVolume(music, (float)volume[MUSIC]/(MAXVOLUME -1));}
+		if (optionsIndex == MUSIC){SetMusicVolume(music, 0.1 * (double)volume[MUSIC]/(MAXVOLUME -1));}
 		else if (optionsIndex == SFX){
 			float vol = (float)volume[SFX]/(MAXVOLUME -1);
 			SetSoundVolume(s_accept, vol);
@@ -318,7 +298,7 @@ void OptionsScreen(void){
 	}
 	else if((IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT)) && optionsIndex != optionsmenuCount-1){
 		volume[optionsIndex] = (volume[optionsIndex] -1 +MAXVOLUME) % MAXVOLUME;
-		if (optionsIndex == MUSIC){SetMusicVolume(music, (float)volume[MUSIC]/(MAXVOLUME -1));}
+		if (optionsIndex == MUSIC){SetMusicVolume(music, 0.1 * (double)volume[MUSIC]/(MAXVOLUME -1));}
 		else if (optionsIndex == SFX){
 			float vol = (float)volume[SFX]/(MAXVOLUME -1);
 			SetSoundVolume(s_accept, vol);

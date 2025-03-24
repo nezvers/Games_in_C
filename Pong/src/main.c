@@ -239,7 +239,7 @@ void DrawScore(){
 
 void DrawPaddles(){
     DrawRectangle (padX1 - padW, padY1, padW, padH, BLUE);
-    DrawRectangle (padX2, padY2, padW, padH, RED);
+    DrawRectangle (padX2, padY2, padW, padH, ORANGE);
 }
 
 void DrawBall(){

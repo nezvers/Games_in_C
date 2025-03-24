@@ -12,6 +12,7 @@
 
 #include "raylib.h"
 #include <stdio.h>
+#include "game.h"
 
 //Sounds & music are converted using bi2header - https://github.com/AntumDeluge/bin2header
 // SFX from sfxcellar.accusonus.com
@@ -20,7 +21,7 @@
 #include "SFX_Cellar_UI_Button_43.wav.h"
 #include "SFX_Cellar_UI_Button_67.wav.h"
 // music - https://modarchive.org/index.php?request=view_by_moduleid&query=172898
-#include "4_rndd.xm.h"
+#include "MUSIC_4_rndd.xm.h"
 
 
 #if defined(PLATFORM_WEB)
@@ -52,11 +53,20 @@ Sound s_menu;
 Sound s_apple;
 Music music;
 
+
+
+#define MAXVOLUME 11
+#define MUSIC 0
+#define SFX 1
+int volume[] = { MAXVOLUME - 1,MAXVOLUME - 1 };
+
+int optionsmenuCount = 3;
+int optionsIndex;
+
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
-void InitGame(void);
-void GameLoop(void);     // Update and Draw one frame
+
 void (*Screen)(void);
 void InitTitle(void);
 void TitleScreen(void);
@@ -66,7 +76,7 @@ void InitDifficulity(void);
 void DifficulityScreen(void);
 void InitLevel(void);
 void LevelScreen(void);
-void InitGameScreen(void);
+void Start(void);
 void GameScreen(void);
 
 int quadratic_easing_out(int start, int end, float position);
@@ -75,37 +85,12 @@ Color ColorBlend(Color a, Color b, float percent);
 
 
 //----------------------------------------------------------------------------------
-// Main Entry Point
-//----------------------------------------------------------------------------------
-int main(){
-    InitGame();	
-	
-#if defined(PLATFORM_WEB)
-    emscripten_set_main_loop(GameLoop, 0, 1);
-#else
-    SetTargetFPS(60);   // Set our game to run at 60 frames-per-second
-    //--------------------------------------------------------------------------------------
-    // Main game loop
-    while (!WindowShouldClose() && !quit){    // Detect window close button or ESC key
-        GameLoop();
-    }
-#endif
-
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-    CloseAudioDevice();
-	CloseWindow();        // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
-
-    return 0;
-}
-
 //----------------------------------------------------------------------------------
 // Module Functions Definition
 //----------------------------------------------------------------------------------
 
 
-void InitGame(void){
+void Init(void){
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(screenWidth, screenHeight, "Near Miss Snake");
 	
@@ -123,13 +108,26 @@ void InitGame(void){
 	s_menu = LoadSoundFromWave(w_menu);
 	s_apple = LoadSoundFromWave(w_apple);
 	music = LoadMusicStreamFromMemory(".xm", (unsigned char *)&rndd_xm, sizeof rndd_xm);
-	SetMusicVolume(music, 1.0);
+	SetMusicVolume(music, 0.1);
 	
 	PlayMusicStream(music);
 	InitTitle();
 }
 
-void GameLoop(void){
+// Main game loop
+void GameLoop(void) {
+	while (!WindowShouldClose() && !quit) {    // Detect window close button or ESC key
+		UpdateFrame();
+	}
+}
+
+void Cleanup(void)
+{
+	CloseAudioDevice();
+	CloseWindow();
+}
+
+void UpdateFrame(void){
 	if (IsWindowResized())
         {
             screenWidth = GetScreenWidth();
@@ -263,23 +261,12 @@ void TitleScreen(void){
 				originH += (fontBigH + fontSmallH) /2;
 			}
 		}
-		// if (blinkTime > blinkInterval /5){
-			// DrawText(hint, midW -hintFontW, hintH -(hintFontH /2), hintFontH, palette[1]);
-		// }
 
     EndDrawing();
     //----------------------------------------------------------------------------------
 	
 }
 
-
-#define MAXVOLUME 11
-#define MUSIC 0
-#define SFX 1
-int volume[] = {MAXVOLUME-1,MAXVOLUME-1};
-
-int optionsmenuCount = 3;
-int optionsIndex;
 
 
 void InitOptions(void){
@@ -299,7 +286,7 @@ void OptionsScreen(void){
 	}
 	else if((IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT)) && optionsIndex != optionsmenuCount-1){
 		volume[optionsIndex] = (volume[optionsIndex] +1) % MAXVOLUME;
-		if (optionsIndex == MUSIC){SetMusicVolume(music, (float)volume[MUSIC]/(MAXVOLUME -1));}
+		if (optionsIndex == MUSIC){SetMusicVolume(music, 0.1 * (double)volume[MUSIC]/(MAXVOLUME -1));}
 		else if (optionsIndex == SFX){
 			float vol = (float)volume[SFX]/(MAXVOLUME -1);
 			SetSoundVolume(s_accept, vol);
@@ -311,7 +298,7 @@ void OptionsScreen(void){
 	}
 	else if((IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT)) && optionsIndex != optionsmenuCount-1){
 		volume[optionsIndex] = (volume[optionsIndex] -1 +MAXVOLUME) % MAXVOLUME;
-		if (optionsIndex == MUSIC){SetMusicVolume(music, (float)volume[MUSIC]/(MAXVOLUME -1));}
+		if (optionsIndex == MUSIC){SetMusicVolume(music, 0.1 * (double)volume[MUSIC]/(MAXVOLUME -1));}
 		else if (optionsIndex == SFX){
 			float vol = (float)volume[SFX]/(MAXVOLUME -1);
 			SetSoundVolume(s_accept, vol);
@@ -496,7 +483,7 @@ void LevelScreen(void){
 		}
 		if (revealSegment == length){
 			// Start moving
-			InitGameScreen();
+			Start();
 			prevPalette[0] = palette[0];
 			prevPalette[1] = palette[1];
 			prevPalette[2] = palette[2];
@@ -556,7 +543,7 @@ void SpawnApple(){
 
 bool isDead = false;
 
-void InitGameScreen(){
+void Start(){
 	Screen = GameScreen;
 	time = 0;
 	isDead = false;

@@ -411,6 +411,8 @@ typedef struct{
 }vec2;
 
 int level[WIDTH*HEIGHT];
+
+// Solid block layout for a level
 int lvl_1[WIDTH*HEIGHT] = {
 3,0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -450,12 +452,11 @@ void InitLevel(void){
 	revealSegment = -1;
 	dir = (vec2){1,0};
 	nextDir = (vec2){1,0};
+
+	// Place snake in level
 	snake[0] = WIDTH*4 + 5;
 	snake[1] = WIDTH*4 + 4;
 	snake[2] = WIDTH*4 + 3;
-	// level[WIDTH*4 + 5] = SNAKE;
-	// level[WIDTH*4 + 4] = SNAKE;
-	// level[WIDTH*4 + 3] = SNAKE;
 	
 	// Get free tile count
 	freeCount = 0;

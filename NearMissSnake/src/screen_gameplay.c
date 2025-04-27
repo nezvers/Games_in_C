@@ -12,16 +12,19 @@ void Died(void);
 void Push(int from, int to);
 void Eat(int t);
 
+/* Wrap position if going out of bounds and return tile index*/
 int PosWrap(Vector2Int pos) {
     pos.x = (pos.x + COLUMNS) % COLUMNS;
     pos.y = (pos.y + ROWS) % ROWS;
     return pos.x + COLUMNS * pos.y;
 }
 
+/* Convert tile index to Vector2Int*/
 Vector2Int index2vec(int p) {
     return (Vector2Int) { p% COLUMNS, p / COLUMNS };
 }
 
+/* Convert Vector2Int to tile index*/
 int vec2index(Vector2Int p) {
     return p.x + p.y * COLUMNS;
 }
@@ -40,7 +43,7 @@ void GameplayScreen() {
     }
 
     moveTimer = (moveTimer + 1) % waitInterval;
-    if (InputUpdate()) {
+    if (InputUpdate() && moveTimer > waitInterval / 3) {
         moveTimer = 0;
     }
 
@@ -73,7 +76,7 @@ void GameplayScreen() {
     DrawLevel(palette);
     EndDrawing();
 
-  // do InitLevel after draw
+    // do InitLevel after draw
     if (isDead) {
         Died();
     }
@@ -82,35 +85,52 @@ void GameplayScreen() {
 
 bool InputUpdate(void) {
     Vector2Int d = (Vector2Int){ 0,0 };
-    if (IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT)) {
+    if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) {
         d = (Vector2Int){ 1,0 };
     }
-    else if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT)) {
+    else if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) {
         d = (Vector2Int){ -1,0 };
     }
-    else if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP)) {
+    else if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) {
         d = (Vector2Int){ 0,-1 };
     }
-    else if (IsKeyPressed(KEY_S) || IsKeyPressed(KEY_DOWN)) {
+    else if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN)) {
         d = (Vector2Int){ 0,1 };
     }
-    if ((d.x != 0 || d.y != 0) && ((d.x == 0 && d.y != -moveDir.y) || (d.y == 0 && d.x != -moveDir.x))) {
-        nextDir = d;
-        if (d.x == moveDir.x && d.y == moveDir.y) {
-            return true;	// can be used to instantly do the move
-        }
+
+    if (d.x == 0 && d.y == 0) {
+        // No input direction
+        return false;
+    }
+
+    if (d.x != 0 && d.y != 0) {
+        // Allow only one direction
+        return false;
+    }
+
+    if ((d.x != 0 && -d.x == moveDir.x) || (d.y != 0 && -d.y == moveDir.y)) {
+        // No movement in opposite direction
+        return false;
+    }
+
+    nextDir = d;
+    if (nextDir.x == moveDir.x && nextDir.y == moveDir.y) {
+        // can be used to instantly do the move
+        return true;
     }
     return false;
 }
 
-
+/* Get tile index for next position using moveDir*/
 int NextTile(int pos) {
     Vector2Int p = index2vec(pos);
     return PosWrap((Vector2Int) { p.x + moveDir.x, p.y + moveDir.y });
 }
 
 void Move(void) {
+    // Remove snake's tail tile
     levelTiles[snakeTiles[snakeLength - 1]] = FREE;
+
     for (int i = snakeLength - 1; i > 0; i--) {
         snakeTiles[i] = snakeTiles[i - 1];
     }

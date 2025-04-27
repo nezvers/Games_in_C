@@ -39,6 +39,7 @@ Color ColorBlend(Color a, Color b, float percent) {
     };
 }
 
+// TODO: Add more level layouts
 /* Populate tile data for set level*/
 void SetLevel(int* lvl) {
     for (int i = 0; i < COLUMNS * ROWS; i++) {
@@ -73,6 +74,7 @@ void InitLevelStart(void) {
     nextDir = (Vector2Int){ 1,0 };
 
     // Place snake in level
+    // TODO: place it in level data
     snakeTiles[0] = COLUMNS * 4 + 5;
     snakeTiles[1] = COLUMNS * 4 + 4;
     snakeTiles[2] = COLUMNS * 4 + 3;

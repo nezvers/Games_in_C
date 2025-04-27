@@ -1,6 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <stdbool.h>
+// MAYBE: #include <stdint.h> convert most ints to uint8_t
+
 void Init(void);
 void Cleanup(void);
 void UpdateFrame(void);

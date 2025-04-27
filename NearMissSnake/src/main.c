@@ -4,9 +4,9 @@
 
 #define SUPPORT_LOG_INFO
 #if defined(SUPPORT_LOG_INFO)
-    #define LOG(...) printf(__VA_ARGS__)
+#define LOG(...) printf(__VA_ARGS__)
 #else
-    #define LOG(...)
+#define LOG(...)
 #endif
 
 #include "game.h"
@@ -21,7 +21,10 @@ int main(void)
     Init();
 
     SetTargetFPS(60);
-    GameLoop();
+
+    while (!WindowShouldClose() && !quit) {    // Detect window close button or ESC key
+        UpdateFrame();
+    }
 
     Cleanup();
 

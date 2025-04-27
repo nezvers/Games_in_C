@@ -21,7 +21,7 @@ Or download repository as zip.
 cd Games_in_C/NearMissSnake
 cmake -S . -B ./build -G "${YOUR_BUILD_TARGET_CHOICE}"
 ```
-### Mingw example with optional debug build
+#### Windows Mingw example with optional debug build
 ```
 cmake -S . -B ./build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug
 mingw32-make -C ./build

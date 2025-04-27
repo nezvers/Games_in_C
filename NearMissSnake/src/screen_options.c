@@ -63,7 +63,7 @@ void OptionsScreen(void) {
     int originH = screenHeight / 2 - totalH / 2;
     int midW = screenWidth / 2;
 
-    //----------------------------------------------------------------------------------
+
     BeginDrawing();
 
     ClearBackground(palette[0]);
@@ -80,5 +80,4 @@ void OptionsScreen(void) {
 
 
     EndDrawing();
-    //----------------------------------------------------------------------------------
 }

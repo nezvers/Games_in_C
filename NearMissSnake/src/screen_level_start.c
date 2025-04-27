@@ -6,6 +6,7 @@
 int tileSize = TSIZE;
 int levelTiles[COLUMNS * ROWS];
 
+// TODO: use custom struct for data extendability
 // Solid block layout for a level
 int lvl_1[COLUMNS * ROWS] = {
 3,0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,
@@ -133,13 +134,11 @@ void LevelStartScreen(void) {
     };
 
 
-    //----------------------------------------------------------------------------------
     BeginDrawing();
 
     ClearBackground(palette[0]);
     DrawLevel(changedColor);
     EndDrawing();
-    //----------------------------------------------------------------------------------
 }
 
 
@@ -151,7 +150,7 @@ void DrawLevel(Color pal[4]) {
         }
     }
 
-    // Black bars
+    // Black bars outside games aspect ratio
     Color barCol = { 0,0,20, 255 };
     if (originX > 0) {
         DrawRectangle(0.0f, 0.0f, originX, screenHeight, barCol);

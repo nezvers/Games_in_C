@@ -46,7 +46,7 @@ void DifficulityScreen(void) {
     int hintH = (int)(screenHeight / 17 * textSizeRatio);;
     int hintW = MeasureText(hintText, hintH);
 
-    //----------------------------------------------------------------------------------
+
     BeginDrawing();
 
     ClearBackground(palette[0]);
@@ -55,5 +55,4 @@ void DifficulityScreen(void) {
     DrawText(hintText, midW - hintW / 2, screenHeight - (screenHeight / 4) - (fontH / 2), hintH, palette[2]);
 
     EndDrawing();
-    //----------------------------------------------------------------------------------
 }

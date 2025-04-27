@@ -17,11 +17,14 @@ Or download repository as zip.
 - In dropdown menu next to "Play" button choose `NearMissSnake.exe`
 
 ## Cmake
+- Cmake should be installed and accessible from cmd/powershell/terminal
 ```
 cd Games_in_C/NearMissSnake
 cmake -S . -B ./build -G "${YOUR_BUILD_TARGET_CHOICE}"
 ```
-#### Example - Windows Mingw with optional debug build
+
+### Example - Windows Mingw with optional debug build
+- Mingw64 should be installed and `mingw64/bin` folder added to environment `PATH` variable
 ```
 cmake -S . -B ./build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug
 mingw32-make -C ./build

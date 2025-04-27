@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 include(FetchContent)
 
-set(ProjectName Tetris)
+set(ProjectName NotTetris)
 project(${ProjectName})
 
 

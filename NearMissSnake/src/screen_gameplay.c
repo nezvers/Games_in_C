@@ -5,8 +5,6 @@
 
 bool isDead = false;
 
-bool InputUpdate(void);
-
 int NextTile(int pos);
 void Move(void);
 void Food(int t);

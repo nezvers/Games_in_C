@@ -30,7 +30,7 @@
 #include <emscripten/emscripten.h>
 #endif
 
-
+void (*CurrentUpdateCallback)(void);
 int screenWidth = COLUMNS * TSIZE;
 int screenHeight = ROWS * TSIZE;
 float textSizeRatio = 1.0;

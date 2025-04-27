@@ -1,7 +1,7 @@
 #ifndef SCREENS_H
 #define SCREENS_H
 
-void (*CurrentUpdateCallback)(void);
+extern void (*CurrentUpdateCallback)(void);
 void InitTitle(void);
 void TitleScreen(void);
 

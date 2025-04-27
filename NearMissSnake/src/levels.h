@@ -28,6 +28,7 @@ extern int moveTimer;
 
 void UpdateFreeTiles(void);
 void SpawnApple(void);
+bool InputUpdate(void);
 
 /*Can't use current palette, because colors can be interpolated between palettes*/
 void DrawLevel(Color pal[4]);

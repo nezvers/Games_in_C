@@ -9,7 +9,10 @@
 - XM mod music by [Drozerix/M0N50N](https://modarchive.org/index.php?request=view_by_moduleid&query=172898)
 
 # Building
-`git clone https://github.com/nezvers/Games_in_C.git`  
+```
+git clone https://github.com/nezvers/Games_in_C.git
+cd Games_in_C/NearMissSnake
+```  
 Or download repository as zip.
 
 ## Visual Studio
@@ -20,7 +23,6 @@ Or download repository as zip.
 ## Cmake
 - Cmake should be installed and accessible from cmd/powershell/terminal
 ```
-cd Games_in_C/NearMissSnake
 cmake -S . -B ./build -G "${YOUR_BUILD_TARGET_CHOICE}"
 ```
 
